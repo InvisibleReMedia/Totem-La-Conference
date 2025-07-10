@@ -1,0 +1,33 @@
+.vbox-a {
+	display:flex;
+	flex-direction:row;
+	height:100%;
+	width:auto
+}
+.vbox-element-b {
+	box-sizing:content-box;
+	margin:0 0;
+	vertical-align:top;
+	width:300px;
+	height:135px;
+	background-repeat:no-repeat;
+	background-size:cover;
+	background-image:url('../images/handigo.png')
+}
+.vbox-element-c {
+	box-sizing:content-box;
+	padding:0 0 0 50px;
+	border-left:5px ridge rgba(255,255,255,0.3);
+	width:700px;
+	height:auto
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hideSB::-webkit-scrollbar {
+	display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.hideSB {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}

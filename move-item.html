@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+        <meta content="IE=edge" http-equiv="X-UA-Compatible">
+		<meta name="viewport" content="width=device-width,initial-scale=1">
+        <meta name="msapplication-tap-highlight" content="no">
+        <title>Test</title>
+        <script language="JavaScript">
+        	function moveUp(obj) {
+        		this.current = obj.parentNode
+        		this.previous = current.previousSibling
+        		if (this.previous) {
+	        		this.current.style.transform = "translate(0, -82px)"
+	        		this.previous.style.transform = "translate(0, 82px)"
+	        		setTimeout(function(e) {
+		    			this.current.style.transform = "none"
+		    			let parent = current.parentNode
+		    			this.previous.style.transform = "none"
+		    			parent.removeChild(this.current)
+		    			parent.insertBefore(this.current, this.previous)
+	        		}, 1000)
+        		}
+        	}
+        	function moveDown(obj) {
+        		this.current = obj.parentNode
+        		this.next = current.nextSibling
+        		if (this.next) {
+	        		this.current.style.transform = "translate(0, 82px)"
+        			this.next.style.transform = "translate(0, -82px)"
+	        		setTimeout(function(e) {
+		    			this.current.style.transform = "none"
+		    			let parent = current.parentNode
+		    			this.next.style.transform =  "none"
+		    			parent.removeChild(this.next)
+		    			parent.insertBefore(this.next, this.current)
+	        		}, 1000)
+        		}
+        	}
+        </script>
+        <style>
+        	.item {
+        		position : relative;
+        		background-color: blue;
+        		color: white;
+        		width:200px;
+        		display:block;
+        		height:50px;
+        		border:1px solid white;
+        		border-radius: 15px;
+        		padding:15px;
+        		transition : transform 1s;
+        	}
+        </style>
+	</head>
+	<body>
+		<div><div><div class="item">test 1<button onclick="moveUp(this)">move up</button><button onclick="moveDown(this)">move down</button></div><div class="item">test 2<button onclick="moveUp(this)">move up</button><button onclick="moveDown(this)">move down</button></div><div class="item">test 3<button onclick="moveUp(this)">move up</button><button onclick="moveDown(this)">move down</button></div><div class="item">test 4<button onclick="moveUp(this)">move up</button><button onclick="moveDown(this)">move down</button></div></div></div>
+	</body>
+</html>

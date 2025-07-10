@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="fr">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="language" content="french">
+		<meta name="viewport" content="width=device-width">
+		<link rel="canonical" href="https://quilljs.com/standalone/full/"/>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.css"/>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/monokai-sublime.min.css"/>
+		<link rel="stylesheet" href="quill/quill.snow.css"/>
+		<title>
+		</title>
+		<style>
+			body { } /* remember to set the width in size or % */ .center-vertically { margin:auto; padding:10px; } .padding-center-vertically { padding : 20px 0; } .line-height-center-vertically { line-height : 30px; height: 30px; } .multiple-lines-center-vertically { display:inline-block; vertical-align : middle; } .absolute-right { position: absolute; top:-50%; left:100%; transform : translate(-100%,50%); } .center-horizontally { display: block; margin: auto 0; } .text-center { text-align : center; } .left-horizontally { float : left; } .right-horizontally { float : right; } .clearfix { overflow : auto; } .flex-row : { display:flex; flex-direction:row; border:1px solid black; width:100% } #standalone-container {   box-sizing: content-box;   width:100%;height:100%;  }  #editor-container { box-sizing: content-box;   height: 150px;  }
+		</style>
+		<script language="Javascript">
+			function play(t) { let a= new Audio('ctrl-' + t + '.mp3'); a.play();
+				this.t = t
+				this.h = {
+					"a" : { first : 6, second : 3 },
+					"c" : { first : 7, second : 2 },
+					"v" : { first : 8, second : 3 },
+					"z": { first : 6, second : 3 },
+					"x" : { first : 7, second : 2 }
+				}
+				setTimeout( function(e) {
+					this.x= document.getElementById('screenshot');
+					this.x.src= 'keyboard-down-ctrl.jpg';
+					setTimeout(function(e) {
+						this.x.src= 'keyboard-down-' + this.t + '.jpg';
+					}, this.h[this.t].second * 1000);
+				}, this.h[this.t].first * 1000);
+			}
+		</script>
+
+	</head>
+	<body>
+		<header style="display:inline-flex;height:100px;width:100%">
+			<div style="width:100%">
+				<div style="text-align:center;line-height:100px;height:100px">
+					<p style="line-height:1.5;display:inline-block;vertical-align:middle">
+						Formation informatique						<br/>
+						Le copié collé
+					</p>
+
+				</div>
+
+			</div>
+
+		</header>
+		<section style="display:inline-flex;height:100%;width:100%">
+			<div style="width:100%">
+				<div class="flex-row" style="width:100%;height:100%">
+					<div style="height:100%">
+						<div id="standalone-container">
+							 							<div id="toolbar-container">
+								  								<span class="ql-formats">
+									<select class="ql-font">
+									</select>
+									  									<select class="ql-size">
+									</select>
+									 
+								</span>
+  								<span class="ql-formats">
+									  									<button class="ql-bold">
+									</button>
+									  									<button class="ql-italic">
+									</button>
+									  									<button class="ql-underline">
+									</button>
+									  									<button class="ql-strike">
+									</button>
+									 
+								</span>
+  								<span class="ql-formats">
+									  									<select class="ql-color">
+									</select>
+									  									<select class="ql-background">
+									</select>
+									 
+								</span>
+  								<span class="ql-formats">
+									  									<button class="ql-script" value="sub">
+									</button>
+									  									<button class="ql-script" value="super">
+									</button>
+									 
+								</span>
+  								<span class="ql-formats">
+									  									<button class="ql-header" value="1">
+									</button>
+									  									<button class="ql-header" value="2">
+									</button>
+									  									<button class="ql-blockquote">
+									</button>
+									  									<button class="ql-code-block">
+									</button>
+									 
+								</span>
+  								<span class="ql-formats">
+									  									<button class="ql-list" value="ordered">
+									</button>
+									  									<button class="ql-list" value="bullet">
+									</button>
+									  									<button class="ql-indent" value="-1">
+									</button>
+									  									<button class="ql-indent" value="+1">
+									</button>
+									 
+								</span>
+  								<span class="ql-formats">
+									  									<button class="ql-direction" value="rtl">
+									</button>
+									  									<select class="ql-align">
+									</select>
+									 
+								</span>
+  								<span class="ql-formats">
+									  									<button class="ql-link">
+									</button>
+									  									<button class="ql-image">
+									</button>
+									  									<button class="ql-video">
+									</button>
+									  									<button class="ql-formula">
+									</button>
+									 
+								</span>
+  								<span class="ql-formats">
+									  									<button class="ql-clean">
+									</button>
+									 
+								</span>
+  
+							</div>
+  							<div id="editor-container">
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section style="display:inline-flex;height:100%;width:100%">
+			<div style="width:80%">
+				<img id="screenshot" src="keyboard-free.jpg" style="padding:3px;box-sizing:content-box; max-height:100%;height:auto;width:100%"/>
+			</div>
+			<div style="width:20%">
+				<nav class="flex-row" style="width:100%;height:100%">
+					<div style="height:20%">
+						<div style="position:relative">
+							<button class="absolute-right" onclick="play('a')" id="ca">
+								CTRL-A
+							</button>
+
+						</div>
+
+					</div>
+					<div style="height:20%">
+						<div style="position:relative">
+							<button class="absolute-right" onclick="play('c')" id="cc">
+								CTRL-C
+							</button>
+
+						</div>
+
+					</div>
+					<div style="height:20%">
+						<div style="position:relative">
+							<button class="absolute-right" onclick="play('v')" id="cv">
+								CTRL-V
+							</button>
+
+						</div>
+
+					</div>
+					<div style="height:20%">
+						<div style="position:relative">
+							<button class="absolute-right" onclick="play('x')" id="cx">
+								CTRL-X
+							</button>
+
+						</div>
+
+					</div>
+					<div style="height:20%">
+						<div style="position:relative">
+							<button class="absolute-right" id="cz" onclick="play('z')">
+								CTRL-Z
+							</button>
+
+						</div>
+
+					</div>
+
+				</nav>
+
+			</div>
+
+		</section>
+		<footer style="display:inline-flex;height:50px;width:100%">
+			<div style="width:100%">
+				<div style="text-align:center;line-height:50px;height:50px">
+					copyright@2021
+				</div>
+
+			</div>
+
+		</footer>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js">
+		</script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js">
+		</script>
+		<script src="quill/quill.min.js">
+		</script>
+		<script>
+			 var quill= new Quill('#editor-container', {   modules: {    formula: true,    syntax: true,    toolbar: '#toolbar-container'   },   placeholder: 'Ecrivez un texte...',   theme: 'snow'  });
+		</script>
+		<img src="keyboard-down-a.jpg" style="display:none"/>
+		<img src="keyboard-down-c.jpg" style="display:none"/>
+		<img src="keyboard-down-v.jpg" style="display:none"/>
+		<img src="keyboard-down-x.jpg" style="display:none"/>
+		<img src="keyboard-down-z.jpg" style="display:none"/>
+		<img src="keyboard-down-ctrl.jpg" style="display:none"/>
+		<audio src="ctrl-a.mp3" style="display:none"></audio>
+		<audio src="ctrl-c.mp3" style="display:none"></audio>
+		<audio src="ctrl-v.mp3" style="display:none"></audio>
+		<audio src="ctrl-x.mp3" style="display:none"></audio>
+		<audio src="ctrl-z.mp3" style="display:none"></audio>
+	</body>
+
+</html>

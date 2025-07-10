@@ -1,0 +1,17 @@
+.page {
+		position:absolute;
+		width:100%;
+		height:100%;
+	}
+	header {
+		background-image:url('totem-header.png');
+		position:absolute;
+	}
+	article {
+		background-image:url('totem-content.png');
+		height:500px;
+	}
+	footer {
+		background-image:url('totem-footer.png');
+		position:absolute;
+	}

@@ -1,0 +1,35 @@
+.vbox-a {
+	display:flex;
+	flex-direction:column;
+	width:300px;
+	margin:0 auto;
+	height:auto
+}
+.vbox-element-b {
+	height:100%
+}
+.vbox-c {
+	display:flex;
+	flex-direction:column;
+	width:300px;
+	margin:0 auto;
+	height:auto
+}
+.vbox-element-d {
+	height:100%
+}
+.hbox-e {
+	display:inline-flex;
+	width:auto;
+	height:auto
+}
+.hbox-element-f {
+	width:1%
+}
+.hbox-element-g {
+	width:auto;
+	height:auto
+}
+.hbox-element-h {
+	width:1%
+}

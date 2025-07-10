@@ -1,0 +1,46 @@
+body {
+}
+
+
+.page {
+
+		position:absolute;
+		left:33%;
+		width:33%;
+
+	}
+
+.page>div {
+	width:207px;
+}
+
+	header {
+
+		position:relative;
+		background-image:url('../totem-header.png');
+		height:64px;
+		width:207px;
+		text-align: center;
+		font-family: Lobster;
+		font-size:0.5em;
+
+	}
+
+	article {
+
+		position:relative;
+		background-repeat: repeat-y;
+		height:140px;
+		width:207px;
+
+	}
+
+	footer {
+
+		background-image:url('../totem-footer.png');
+		vertical-align:bottom;
+		position:relative;
+		height:86px;
+		width:207px;
+
+	}

@@ -1,0 +1,41 @@
+<style>
+    .group {
+        display:block;
+        box-sizing: content-box;
+    }
+    .group>div {
+        display:inline-block;
+        padding-bottom:4px;
+    }
+    .group>div>span,.group>div>div {
+        width:200px;
+        height:40px;
+        text-align: center;
+        padding-top:20px;
+        padding-bottom:0px;
+        display:inline-block;
+        border:1px solid black;
+        background-color:blue;
+        color:white;
+    }
+
+    input[type=text], label {
+        line-height:1.4em;
+    }
+
+</style>
+
+<div class="group">
+    <div>
+        <span><label>First Name</label></span>
+        <span><input type="text"/></span>
+    </div>
+    <div>
+        <div><label>Last Name</label></div>
+        <div><input type="text"/></div>
+    </div>
+    <div>
+        <div><label>Address</label></div>
+        <div><input type="text"/></div>
+    </div>
+</div>

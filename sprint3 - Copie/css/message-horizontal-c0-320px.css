@@ -1,0 +1,54 @@
+.vbox-a {
+	display:flex;
+	flex-direction:column;
+	height:100%;
+	width:200px;
+	margin:0 auto
+}
+.vbox-element-b {
+	height:100%
+}
+.vbox-c {
+	display:flex;
+	flex-direction:column;
+	width:320px;
+	margin:0 auto;
+	height:auto
+}
+.vbox-element-d {
+	height:100%
+}
+.vbox-i {
+	display:flex;
+	flex-direction:column;
+	width:100%;
+	height:auto
+}
+.vbox-element-j {
+	height:auto
+}
+.hbox-k {
+	display:inline-flex;
+	width:100%;
+	height:auto
+}
+.hbox-element-l {
+	width:100%
+}
+.vbox-m {
+	display:flex;
+	flex-direction:column;
+	width:100%;
+	height:auto
+}
+.vbox-element-n {
+	margin:0 auto;
+	height:182px;
+	width:320px;
+	background-image:url('../images/totem-horizontal+baseline-noir-noir-fond-transparent.png')
+}
+.vbox-element-o {
+	margin:0 auto;
+	height:auto;
+	width:320px
+}

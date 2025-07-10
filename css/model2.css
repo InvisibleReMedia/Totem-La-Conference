@@ -1,0 +1,40 @@
+
+	body {
+		min-width:350px;
+		background-color:yellow;
+	}
+	@font-face {
+		font-family : "Lobster";
+		src : url("../fonts/Lobster/Lobster-Regular.ttf")
+	}
+	@font-face {
+		font-family : "Open-Sans";
+		src : url("../fonts/Open-Sans/OpenSans-Regular.ttf")
+	}
+	.title {
+		font-family:Lobster, Arial, Helvetica;
+		font-size:2em;
+		line-height:0.5;
+		display:block;
+		color:white;
+		margin-right:20px;
+		line-height:250px;
+		height:250px;
+	}
+	.loginArea {
+		background-color:white;
+		border-radius:15px;
+		border:1px solid black;
+		box-shadow:1px 3px 3px 0px black;
+	}
+	dt {
+		text-decoration:underline;
+		font-family:Open-Sans, Arial, Helvetica;
+		font-size:1em;
+	}
+	input[type=text] {
+		border-radius:15px;
+		background-color:yellow;
+		color:white;
+		width:100%;
+	} 

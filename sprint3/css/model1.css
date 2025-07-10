@@ -1,0 +1,37 @@
+
+	@font-face {
+		font-family : "Lobster";
+		src : url("../fonts/Lobster/Lobster-Regular.ttf")
+	}
+	@font-face {
+		font-family : "Open-Sans";
+		src : url("../fonts/Open-Sans/OpenSans-Regular.ttf")
+	}
+	body {
+		background-color:white;
+	}
+	input[type=text] {
+		border-radius:15px;
+		background-color:white;
+		color:black;
+		width:90%;
+	}
+	input[type=text]:focus {
+		outline-style:none;
+		box-shadow:0px 3px 3px 0px black;
+	}
+	input[type=button] {
+		font-family:Open-Sans, Arial, Helvetica;
+		font-size:1em;
+		border-radius:15px;
+		background-color:white;
+		color:black;
+	}
+	input[type=button]:focus {
+		outline-style:none;
+		box-shadow:0px 3px 3px 0px black;
+	}
+	input[type=button]:active {
+		background-color:black;
+		color:white;
+	}

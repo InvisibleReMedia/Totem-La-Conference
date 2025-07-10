@@ -1,0 +1,34 @@
+.vbox-a {
+	display:flex;
+	flex-direction:column;
+	width:100%;
+	height:auto
+}
+.vbox-element-b {
+	height:auto
+}
+.hbox-c {
+	display:inline-flex;
+	width:100%;
+	height:auto
+}
+.hbox-element-d {
+	width:100%
+}
+.vbox-e {
+	display:flex;
+	flex-direction:column;
+	width:100%;
+	height:auto
+}
+.vbox-element-f {
+	margin:0 auto;
+	height:262px;
+	width:400px;
+	background-image:url('../images/totem-horizontal+baseline-noir-noir-fond-transparent.png')
+}
+.vbox-element-g {
+	margin:0 auto;
+	height:auto;
+	width:400px
+}

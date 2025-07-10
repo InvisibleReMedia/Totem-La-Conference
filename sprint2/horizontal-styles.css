@@ -1,0 +1,10 @@
+.vbox-a { display:flex;flex-direction:column;height:100%;width:100%;height:auto }
+.vbox-element-b { height:100%;height:auto;border:1px solid black }
+.hbox-c { display:inline-flex;width:100%;height:100%;height:auto }
+.hbox-element-d { width:10%;height:auto;border:1px solid black }
+.hbox-element-e { width:80%;border:1px solid black }
+.vbox-f { display:flex;flex-direction:column;height:100%;width:100% }
+.vbox-element-g { height:20%;margin:0 auto;height:182px;width:320px;background-image:url('images/totem-horizontal+baseline-blanc-gris-fond-jaune.png');border:1px solid black }
+.vbox-element-h { height:30%;height:auto;border:1px solid black }
+.vbox-element-i { height:50%;height:auto;border:1px solid black }
+.hbox-element-j { width:10%;height:auto;border:1px solid black }

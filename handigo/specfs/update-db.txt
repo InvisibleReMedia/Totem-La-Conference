@@ -1,0 +1,213 @@
+ALTER TABLE `events`
+	ADD COLUMN `link` MEDIUMINT NULL DEFAULT NULL AFTER `infos`;
+ALTER TABLE `questions`
+	ADD COLUMN `related` MEDIUMINT NULL DEFAULT NULL AFTER `content`;
+ALTER TABLE `evqust`
+	ADD COLUMN `dislikes` INT NULL AFTER `likes`;
+ALTER TABLE `evqust`
+	CHANGE COLUMN `dislikes` `dislikes` INT NOT NULL DEFAULT '0' AFTER `likes`;
+ALTER TABLE `evqust`
+	ADD COLUMN `id_response` MEDIUMINT NULL DEFAULT NULL AFTER `id_question`,
+	ADD COLUMN `responseNumber` TINYINT NULL DEFAULT NULL AFTER `id_response`;
+Procédure applaud
+BEGIN
+	DECLARE counter INT DEFAULT 0;
+	DECLARE count_evqust INT DEFAULT 0;
+	DECLARE id_evqust MEDIUMINT DEFAULT 1;
+	DECLARE `totalValue` INT DEFAULT 0;
+	DECLARE `lastValue` INT DEFAULT 0;
+	SELECT COUNT(*) FROM evqust AS e WHERE e.id_event = id_event INTO @count_evqust;
+	IF @count_evqust = 0 THEN
+		INSERT INTO evqust(id_event, id_question, id_user, `date`, `source`, `likes`, selected, moderation, suppressed) VALUES(id_event, 1, id_user, NOW(), 0, 0, 0, 0, 1);
+	END IF;
+	SELECT id FROM evqust AS e WHERE e.id_event = id_event LIMIT 1 INTO @id_evqust;
+	SELECT COUNT(*) FROM review AS r, evqust AS e WHERE `type` = 'APPLAUD' AND e.id_event = id_event AND r.id_evqust = e.id INTO @counter;
+	SELECT SUM(u.c) FROM (SELECT COUNT(*) AS c FROM review AS r, evqust AS e WHERE r.`type` = 'APPLAUD' AND e.id_event = 4 AND r.id_evqust = e.id GROUP BY CONVERT(UNIX_TIMESTAMP(r.`date`) / 4, UNSIGNED INTEGER) ORDER BY r.id DESC LIMIT 20) AS u INTO @`totalValue`;
+	IF @`totalValue` = 0 THEN
+		SET @`totalValue` = 20;
+	END IF;
+	SELECT COUNT(*) AS c FROM review AS r, evqust AS e WHERE r.`type` = 'APPLAUD' AND e.id_event = 4 AND r.id_evqust = e.id GROUP BY CONVERT(UNIX_TIMESTAMP(r.`date`) / 4, UNSIGNED INTEGER) ORDER BY r.id DESC LIMIT 1 INTO @`lastValue`;
+	INSERT INTO review(id_evqust, id_user, `date`, type, description, infos) VALUES (@id_evqust, id_user, NOW(), 'APPLAUD', 'Applaudir', JSON_OBJECT('counter', @counter + 1, 'vueMeter', @`lastValue` / (@`totalValue` / 4)));
+END
+
+PROCEDURE `addQuestionResponse`(
+	IN `id_user` MEDIUMINT,
+	IN `id_event` MEDIUMINT,
+	IN `question` VARCHAR(256),
+	IN `response1` VARCHAR(256),
+	IN `response2` VARCHAR(256),
+	IN `response3` VARCHAR(256),
+	IN `source` INT
+)
+LANGUAGE SQL
+NOT DETERMINISTIC
+CONTAINS SQL
+SQL SECURITY DEFINER
+COMMENT ''
+BEGIN
+	DECLARE id_question MEDIUMINT;
+	DECLARE id_response1 MEDIUMINT;
+	DECLARE id_response2 MEDIUMINT;
+	DECLARE id_response3 MEDIUMINT;
+	SELECT retAddQuestion(id_user, id_event, question, `source`) INTO @id_question;
+	SELECT retAddQuestion(id_user, id_event, response1, `source`) INTO @id_response1;
+	SELECT retAddQuestion(id_user, id_event, response2, `source`) INTO @id_response2;
+	SELECT retAddQuestion(id_user, id_event, response3, `source`) INTO @id_response3;
+	INSERT INTO questionresponses(question, response1, response2, response3)
+	VALUES (@id_question,
+			  @id_response1,
+			  @id_response2,
+			  @id_response3);
+
+END
+
+
+FUNCTION `retAddQuestion`(
+	`id_user` MEDIUMINT,
+	`id_event` MEDIUMINT,
+	`question` VARCHAR(256),
+	`source` INT
+)
+RETURNS mediumint
+LANGUAGE SQL
+NOT DETERMINISTIC
+CONTAINS SQL
+SQL SECURITY DEFINER
+COMMENT ''
+BEGIN
+DECLARE curEvent MEDIUMINT;
+DECLARE curQuestion MEDIUMINT;
+DECLARE curDate DATETIME;
+DECLARE id_evqust MEDIUMINT;
+DECLARE auto_moderate TINYINT(1);
+DECLARE insert_review TINYINT(1);
+
+
+-- si la question existe déjà
+IF (SELECT EXISTS(SELECT e.id_event
+  						FROM evqust AS e,
+  							  questions AS q
+  						WHERE e.id_question = q.id
+  						AND q.content = question)) THEN
+    SELECT id
+    FROM questions
+    WHERE content = question
+    INTO @curQuestion;
+  	UPDATE questions SET readOnly = true WHERE id = @curQuestion;
+  	-- si cette question est déjà dans l'événement
+  	IF (SELECT EXISTS(SELECT ev.id
+						FROM evqust AS ev, questions AS q
+						WHERE ev.id_question = q.id AND q.content = question AND ev.id_event = id_event
+						AND ((ev.id_user = id_user AND (SELECT JSON_EXTRACT(e.infos, "$.duplicateQuestionType") = "perUser"
+													FROM events AS e WHERE e.id = id_event)) OR 
+							  (SELECT IFNULL(JSON_EXTRACT(e.infos, "$.duplicateQuestionType"),"perEvent") = "perEvent"
+							  	FROM events AS e WHERE e.id = id_event)))) THEN
+	  	SET @insert_review = 0;
+	ELSE
+		SET @insert_review = 1;
+	END IF;
+ELSE
+	INSERT INTO questions(content,
+			              readOnly)
+	VALUES (question,
+		    false);
+	SET @curQuestion = LAST_INSERT_ID();
+	SET @insert_review = 1;
+END IF;
+
+IF @insert_review = 1 THEN
+	SET @curDate = NOW();
+	SELECT JSON_EXTRACT(e.infos, "$.automaticModeration")
+	FROM events AS e
+	WHERE e.id = id_event
+	INTO @auto_moderate;
+	IF ISNULL(@auto_moderate) THEN
+		SET @auto_moderate = 0;
+	END IF;
+	INSERT INTO evqust(id_question,
+		           		 id_event,
+		           		 id_user,
+		           		 `date`,
+		           		 `source`,
+				   		 `likes`,
+				   		 moderation,
+		           		 suppressed)
+	VALUES (@curQuestion,
+		    id_event,
+			 id_user,
+	    	 @curDate,
+	    	 `source`,
+	    	 0,
+	    	 @auto_moderate,
+	    	 false);
+	SET @id_evqust = LAST_INSERT_ID();
+	-- Mise à jour de la table REVIEW
+	-- Ajoute un enregistrement dans la table
+	INSERT INTO review(`date`, id_evqust, id_user, type, description, infos)
+	VALUES (@curDate, @id_evqust, id_user, 'QUESTION', 'Ajout d\'une question', JSON_OBJECT('question', @curQuestion, 'source', `source`));
+END IF;
+RETURN @curQuestion;
+END
+
+
+BEGIN
+		DECLARE curDate DATETIME;
+		DECLARE multiple_likes TINYINT(1);
+		DECLARE permissions INT DEFAULT 0;
+		DECLARE insert_review TINYINT(1);
+		DECLARE insert_likes MEDIUMINT;
+		DECLARE total_likes MEDIUMINT;
+		DECLARE total_dislikes MEDIUMINT;
+
+		SET @multiple_likes = 0;
+		SELECT JSON_EXTRACT(e.infos, "$.multipleLikes")
+		FROM events AS e
+		WHERE e.id = id_event
+		INTO @multiple_likes;
+
+	   SELECT u.permissions
+   	FROM users AS u
+    	WHERE u.id = id_user
+    	INTO @permissions;
+		SET @insert_likes = newLikes;
+		SET @insert_review = 0;
+		SET @curDate = NOW();
+		-- s'il existe déjà des likes pour cet utilisateur
+		IF (SELECT EXISTS(SELECT l.likes
+						  FROM likes AS l
+						  WHERE l.id_evqust = id_evqust AND l.id_user = id_user)) THEN
+			IF @multiple_likes = 1 OR (@permissions & 2) = 2 OR (@permissions & 8) = 8 THEN
+				UPDATE likes AS l
+				SET l.likes = l.likes + newLikes
+				WHERE l.id_evqust = id_evqust AND l.id_user = id_user;
+				SET @insert_review = 1;
+			END IF;
+		ELSE
+			SET @insert_review = 1;
+			IF @multiple_likes = 1 OR (@permissions & 2) = 2 OR (@permissions & 8) = 8 THEN
+				INSERT INTO likes(id_evqust,id_user,likes)
+				VALUES (id_evqust, id_user, newLikes);
+			ELSE
+				INSERT INTO likes(id_evqust, id_user, likes)
+				VALUES (id_evqust, id_user, 1);
+         	SET @insert_likes = 1;
+			END IF;
+		END IF;
+
+		IF @insert_review = 1 THEN
+            -- Mise à jour de la table REVIEW
+			UPDATE evqust AS e
+			SET e.likes = (SELECT SUM(likes) FROM likes AS l WHERE l.id_evqust = id_evqust AND l.likes > 0)
+			WHERE e.id = id_evqust;
+			UPDATE evqust AS e
+			SET e.dislines = (SELECT SUM(likes) FROM likes AS l WHERE l.id_event = id_event AND l.likes < 0)
+			WHERE e.id = id_evqust;
+			SELECT e.likes, e.dislikes
+			FROM evqust AS e
+			WHERE e.id = id_evqust
+			INTO @total_likes, @total_dislikes;
+			-- Ajoute un enregistrement dans la table
+			INSERT INTO review(date, id_evqust, id_user, type, description, infos)
+			VALUES (@curDate, id_evqust, id_user, 'LIKES', 'Ajout de like', JSON_OBJECT('likes', @insert_likes, 'totalLikes', @total_likes, 'totalDisLikes', @total_dislikes));
+		END IF;
+END

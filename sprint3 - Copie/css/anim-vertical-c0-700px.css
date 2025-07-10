@@ -1,0 +1,54 @@
+.vbox-a {
+	display:flex;
+	flex-direction:row;
+	height:320px;
+	width:400px
+}
+.vbox-element-b {
+	width:100%
+}
+.vbox-g {
+	display:flex;
+	flex-direction:row;
+	height:auto;
+	width:auto
+}
+.vbox-element-h {
+	width:auto
+}
+.hbox-i {
+	display:flex;
+	flex-direction:column;
+	height:auto;
+	width:auto
+}
+.hbox-element-j {
+	height:100%;
+	width:auto
+}
+.vbox-k {
+	display:flex;
+	flex-direction:row;
+	height:100%;
+	width:auto
+}
+.vbox-element-l {
+	margin:0 0;
+	vertical-align:middle;
+	width:262px;
+	background-image:url('../images/totem-vertical+baseline-noir-noir-fond-transparent.png')
+}
+.vbox-element-m {
+	width:auto;
+	height:auto
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hideSB::-webkit-scrollbar {
+	display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.hideSB {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}

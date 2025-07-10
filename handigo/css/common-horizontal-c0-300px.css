@@ -1,0 +1,27 @@
+.vbox-a {
+	display:flex;
+	flex-direction:column;
+	width:100%;
+	height:auto
+}
+.vbox-element-b {
+	box-sizing:content-box;
+	margin:0 auto;
+	padding:0 50px 0;
+	height:123px;
+	width:272px;
+	background-size:cover;
+	background-repeat:no-repeat;
+	border-left:5px ridge rgba(255,255,255,0.3);
+	border-right:5px ridge rgba(255,255,255,0.3);
+	background-image:url('../images/handigo.png')
+}
+.vbox-element-c {
+	box-sizing:content-box;
+	padding:0 50px 0;
+	border-left:5px ridge rgba(255,255,255,0.3);
+	border-right:5px ridge rgba(255,255,255,0.3);
+	margin:0 auto;
+	height:auto;
+	width:272px
+}

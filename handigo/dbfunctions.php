@@ -1,0 +1,750 @@
+<?php
+	/*****************
+		  Function : getAuthentName
+		  Parameters : 
+		    $cnx : DB connection
+		    $user : user id
+		    &$greetings : out Civility
+		    &$firstName : out first name
+		    &$lastName : out last name
+		  Output : Nothing
+	*****************/
+
+	function getAuthentName($cnx, $user, &$greetings, &$firstName, &$lastName) {
+		$sql = "SELECT greetings, firstName, lastName FROM users WHERE id = ?";
+		if ($stmt = $cnx->prepare($sql)) {
+			$stmt->bind_param("i", $user);
+			$stmt->bind_result($greetings, $firstName, $lastName);
+			if (!$stmt->execute())
+				logging($cnx, "ERROR", "execute failed - reason:" . $stmt->error, "getAuthentName", "dbfunctions.php");
+			else {
+				$stmt->fetch();
+
+			}
+			$stmt->close();
+		} else {
+			logging($cnx, "ERROR", "error stmt - reason:" . $cnx->error, "getAuthentName", "dbfunctions.php");
+		}
+
+	}
+
+	/*****************
+		  Function : getEventTitle
+		  Parameters : 
+		    $cnx : DB connection
+		    $event : event id
+		    &$title : out event title
+		  Output : Nothing
+	*****************/
+
+	function getEventTitle($cnx, $event, &$title) {
+		$sql = "SELECT title FROM events WHERE id = ?";
+		if ($stmt = $cnx->prepare($sql)) {
+			$stmt->bind_param("i", $event);
+			$stmt->bind_result($title);
+			if (!$stmt->execute())
+				logging($cnx, "ERROR", "execute failed - reason:" . $stmt->error, "getEventTitle", "dbfunctions.php");
+			else {
+				$stmt->fetch();
+
+			}
+			$stmt->close();
+		} else {
+			logging($cnx, "ERROR", "error stmt - reason:" . $cnx->error, "getEventTitle", "dbfunctions.php");
+		}
+
+	}
+
+	/*****************
+		  Function : getQuestion
+		  Parameters : 
+		    $cnx : DB connection
+		    $id : evqust id
+		  Output : HTML draw question
+	*****************/
+
+	function getQuestion($cnx, $id) {
+		$content = null;
+		$likes = null;
+		$date = null;
+		$selected = null;
+		$questionSource = null;
+		$idQuestion = null;
+		$myResponse = null;
+		$responseNumber = null;
+		$response = null;
+		$response1 = null;
+		$response2 = null;
+		$response3 = null;
+		$sql = "SELECT q.content AS content, e.likes AS likes, e.date AS date, e.moderation AS moderation, e.selected AS selected, e.source AS questionSource, e.id_question AS idQuestion, e.id_response AS myResponse, e.responseNumber AS responseNumber, (SELECT r.id FROM questionresponses AS r WHERE r.question = e.id_question AND r.id_event = e.id_event) AS response, (SELECT q1.response1 FROM questionresponses AS q1 WHERE q1.question = e.id_question AND q1.id_event = e.id_event) AS response1, (SELECT q2.response2 FROM questionresponses AS q2 WHERE q2.question = e.id_question AND q2.id_event = e.id_event) AS response2, (SELECT q3.response3 FROM questionresponses AS q3 WHERE q3.question = e.id_question AND q3.id_event = e.id_event) AS response3 FROM questions AS q, evqust AS e WHERE e.id = ? AND e.id_question = q.id";
+		if ($stmt = $cnx->prepare($sql)) {
+			$stmt->bind_param("i", $id);
+			$stmt->bind_result($content, $likes, $date, $moderation, $selected, $questionSource, $idQuestion, $myResponse, $responseNumber, $response, $response1, $response2, $response3);
+			if (!$stmt->execute())
+				logging($cnx, "ERROR", "execute failed - reason:" . $stmt->error, "getQuestion", "dbfunctions.php");
+			else {
+				$stmt->fetch();
+
+				include('drawQuestion.php');
+
+			}
+			$stmt->close();
+		} else {
+			logging($cnx, "ERROR", "error stmt - reason:" . $cnx->error, "getQuestion", "dbfunctions.php");
+		}
+
+	}
+
+	/*****************
+		  Function : getQuestionAnimateur
+		  Parameters : 
+		    $cnx : DB connection
+		    $id : evqust id
+		  Output : HTML draw question
+	*****************/
+
+	function getQuestionAnimateur($cnx, $id) {
+		$content = null;
+		$likes = null;
+		$date = null;
+		$selected = null;
+		$questionSource = null;
+		$idQuestion = null;
+		$myResponse = null;
+		$responseNumber = null;
+		$response = null;
+		$response1 = null;
+		$response2 = null;
+		$response3 = null;
+		$sql = "SELECT q.content AS content, e.likes AS likes, e.date AS date, e.moderation AS moderation, e.selected AS selected, e.source AS questionSource, e.id_question AS idQuestion, e.id_response AS myResponse, e.responseNumber AS responseNumber, (SELECT r.id FROM questionresponses AS r WHERE r.question = e.id_question AND r.id_event = e.id_event) AS response, (SELECT q1.response1 FROM questionresponses AS q1 WHERE q1.question = e.id_question AND q1.id_event = e.id_event) AS response1, (SELECT q2.response2 FROM questionresponses AS q2 WHERE q2.question = e.id_question AND q2.id_event = e.id_event) AS response2, (SELECT q3.response3 FROM questionresponses AS q3 WHERE q3.question = e.id_question AND q3.id_event = e.id_event) AS response3 FROM questions AS q, evqust AS e WHERE e.id = ? AND e.id_question = q.id";
+		if ($stmt = $cnx->prepare($sql)) {
+			$stmt->bind_param("i", $id);
+			$stmt->bind_result($content, $likes, $date, $moderation, $selected, $questionSource, $idQuestion, $myResponse, $responseNumber, $response, $response1, $response2, $response3);
+			if (!$stmt->execute())
+				logging($cnx, "ERROR", "execute failed - reason:" . $stmt->error, "getQuestionAnimateur", "dbfunctions.php");
+			else {
+				$stmt->fetch();
+
+				include('drawQuestionAnimateur.php');
+
+			}
+			$stmt->close();
+		} else {
+			logging($cnx, "ERROR", "error stmt - reason:" . $cnx->error, "getQuestionAnimateur", "dbfunctions.php");
+		}
+
+	}
+
+	/*****************
+		  Function : getQuestionModerateur
+		  Parameters : 
+		    $cnx : DB connection
+		    $id : evqust id
+		  Output : HTML draw question
+	*****************/
+
+	function getQuestionModerateur($cnx, $id) {
+		$content = null;
+		$likes = null;
+		$date = null;
+		$selected = null;
+		$moderated = null;
+		$questionSource = null;
+		$idQuestion = null;
+		$myResponse = null;
+		$responseNumber = null;
+		$response = null;
+		$response1 = null;
+		$response2 = null;
+		$response3 = null;
+		$sql = "SELECT q.content AS content, e.likes AS likes, e.date AS date, e.moderation AS moderated, e.selected AS selected, e.source AS questionSource, e.id_question AS idQuestion, e.id_response AS myResponse, e.responseNumber AS responseNumber, (SELECT r.id FROM questionresponses AS r WHERE r.question = e.id_question AND r.id_event = e.id_event) AS response, (SELECT q1.response1 FROM questionresponses AS q1 WHERE q1.question = e.id_question AND q1.id_event = e.id_event) AS response1, (SELECT q2.response2 FROM questionresponses AS q2 WHERE q2.question = e.id_question AND q2.id_event = e.id_event) AS response2, (SELECT q3.response3 FROM questionresponses AS q3 WHERE q3.question = e.id_question AND q3.id_event = e.id_event) AS response3 FROM questions AS q, evqust AS e WHERE e.id = ? AND e.id_question = q.id";
+		if ($stmt = $cnx->prepare($sql)) {
+			$stmt->bind_param("i", $id);
+			$stmt->bind_result($content, $likes, $date, $moderated, $selected, $questionSource, $idQuestion, $myResponse, $responseNumber, $response, $response1, $response2, $response3);
+			if (!$stmt->execute())
+				logging($cnx, "ERROR", "execute failed - reason:" . $stmt->error, "getQuestionModerateur", "dbfunctions.php");
+			else {
+				$stmt->fetch();
+
+				include('drawQuestionModerateur.php');
+
+			}
+			$stmt->close();
+		} else {
+			logging($cnx, "ERROR", "error stmt - reason:" . $cnx->error, "getQuestionModerateur", "dbfunctions.php");
+		}
+
+	}
+
+	/*****************
+		  Function : getOpinion
+		  Parameters : 
+		    $cnx : DB connection
+		    $id : evqust id
+		  Output : HTML draw opinion
+	*****************/
+
+	function getOpinion($cnx, $id) {
+		$content = null;
+		$likes = null;
+		$dislikes = null;
+		$date = null;
+		$selected = null;
+		$questionSource = null;
+		$idQuestion = null;
+		$myResponse = null;
+		$responseNumber = null;
+		$response = null;
+		$response1 = null;
+		$response2 = null;
+		$response3 = null;
+		$sql = "SELECT q.content AS content, e.likes AS likes, e.dislikes AS dislikes, e.date AS date, e.moderation AS moderation, e.selected AS selected, e.source AS questionSource, e.id_question AS idQuestion, e.id_response AS myResponse, e.responseNumber AS responseNumber, (SELECT r.id FROM questionresponses AS r WHERE r.question = e.id_question AND r.id_event = e.id_event) AS response, (SELECT q1.response1 FROM questionresponses AS q1 WHERE q1.question = e.id_question AND q1.id_event = e.id_event) AS response1, (SELECT q2.response2 FROM questionresponses AS q2 WHERE q2.question = e.id_question AND q2.id_event = e.id_event) AS response2, (SELECT q3.response3 FROM questionresponses AS q3 WHERE q3.question = e.id_question AND q3.id_event = e.id_event) AS response3 FROM questions AS q, evqust AS e WHERE e.id = ? AND e.id_question = q.id";
+		if ($stmt = $cnx->prepare($sql)) {
+			$stmt->bind_param("i", $id);
+			$stmt->bind_result($content, $likes, $dislikes, $date, $moderation, $selected, $questionSource, $idQuestion, $myResponse, $responseNumber, $response, $response1, $response2, $response3);
+			if (!$stmt->execute())
+				logging($cnx, "ERROR", "execute failed - reason:" . $stmt->error, "getOpinion", "dbfunctions.php");
+			else {
+				$stmt->fetch();
+
+				include('drawOpinion.php');
+
+			}
+			$stmt->close();
+		} else {
+			logging($cnx, "ERROR", "error stmt - reason:" . $cnx->error, "getOpinion", "dbfunctions.php");
+		}
+
+	}
+
+	/*****************
+		  Function : getOpinionAnimateur
+		  Parameters : 
+		    $cnx : DB connection
+		    $id : evqust id
+		  Output : HTML draw opinion
+	*****************/
+
+	function getOpinionAnimateur($cnx, $id) {
+		$content = null;
+		$likes = null;
+		$dislikes = null;
+		$date = null;
+		$selected = null;
+		$questionSource = null;
+		$idQuestion = null;
+		$myResponse = null;
+		$responseNumber = null;
+		$response = null;
+		$response1 = null;
+		$response2 = null;
+		$response3 = null;
+		$sql = "SELECT q.content AS content, e.likes AS likes, e.dislikes AS dislikes, e.date AS date, e.moderation AS moderation, e.selected AS selected, e.source AS questionSource, e.id_question AS idQuestion, e.id_response AS myResponse, e.responseNumber AS responseNumber, (SELECT r.id FROM questionresponses AS r WHERE r.question = e.id_question AND r.id_event = e.id_event) AS response, (SELECT q1.response1 FROM questionresponses AS q1 WHERE q1.question = e.id_question AND q1.id_event = e.id_event) AS response1, (SELECT q2.response2 FROM questionresponses AS q2 WHERE q2.question = e.id_question AND q2.id_event = e.id_event) AS response2, (SELECT q3.response3 FROM questionresponses AS q3 WHERE q3.question = e.id_question AND q3.id_event = e.id_event) AS response3 FROM questions AS q, evqust AS e WHERE e.id = ? AND e.id_question = q.id";
+		if ($stmt = $cnx->prepare($sql)) {
+			$stmt->bind_param("i", $id);
+			$stmt->bind_result($content, $likes, $dislikes, $date, $moderation, $selected, $questionSource, $idQuestion, $myResponse, $responseNumber, $response, $response1, $response2, $response3);
+			if (!$stmt->execute())
+				logging($cnx, "ERROR", "execute failed - reason:" . $stmt->error, "getOpinionAnimateur", "dbfunctions.php");
+			else {
+				$stmt->fetch();
+
+				include('drawOpinionAnimateur.php');
+
+			}
+			$stmt->close();
+		} else {
+			logging($cnx, "ERROR", "error stmt - reason:" . $cnx->error, "getOpinionAnimateur", "dbfunctions.php");
+		}
+
+	}
+
+	/*****************
+		  Function : getOpinionModerateur
+		  Parameters : 
+		    $cnx : DB connection
+		    $id : evqust id
+		  Output : HTML draw opinion
+	*****************/
+
+	function getOpinionModerateur($cnx, $id) {
+		$content = null;
+		$likes = null;
+		$dislikes = null;
+		$date = null;
+		$selected = null;
+		$moderated = null;
+		$questionSource = null;
+		$idQuestion = null;
+		$myResponse = null;
+		$responseNumber = null;
+		$response = null;
+		$response1 = null;
+		$response2 = null;
+		$response3 = null;
+		$sql = "SELECT q.content AS content, e.likes AS likes, e.dislikes AS dislikes, e.date AS date, e.moderation AS moderated, e.selected AS selected, e.source AS questionSource, e.id_question AS idQuestion, e.id_response AS myResponse, e.responseNumber AS responseNumber, (SELECT r.id FROM questionresponses AS r WHERE r.question = e.id_question AND r.id_event = e.id_event) AS response, (SELECT q1.response1 FROM questionresponses AS q1 WHERE q1.question = e.id_question AND q1.id_event = e.id_event) AS response1, (SELECT q2.response2 FROM questionresponses AS q2 WHERE q2.question = e.id_question AND q2.id_event = e.id_event) AS response2, (SELECT q3.response3 FROM questionresponses AS q3 WHERE q3.question = e.id_question AND q3.id_event = e.id_event) AS response3 FROM questions AS q, evqust AS e WHERE e.id = ? AND e.id_question = q.id";
+		if ($stmt = $cnx->prepare($sql)) {
+			$stmt->bind_param("i", $id);
+			$stmt->bind_result($content, $likes, $dislikes, $date, $moderated, $selected, $questionSource, $idQuestion, $myResponse, $responseNumber, $response, $response1, $response2, $response3);
+			if (!$stmt->execute())
+				logging($cnx, "ERROR", "execute failed - reason:" . $stmt->error, "getOpinionModerateur", "dbfunctions.php");
+			else {
+				$stmt->fetch();
+
+				include('drawOpinionModerateur.php');
+
+			}
+			$stmt->close();
+		} else {
+			logging($cnx, "ERROR", "error stmt - reason:" . $cnx->error, "getOpinionModerateur", "dbfunctions.php");
+		}
+
+	}
+
+	/*****************
+		  Function : getQuestionContent
+		  Parameters : 
+		    $cnx : DB connection
+		    $id : evqust id
+		  Output : content question
+	*****************/
+
+	function getQuestionContent($cnx, $id) {
+		$sql = "SELECT q.content AS content FROM questions AS q, evqust AS e WHERE e.id = ? AND e.id_question = q.id";
+		if ($stmt = $cnx->prepare($sql)) {
+			$stmt->bind_param("i", $id);
+			$stmt->bind_result($content);
+			if (!$stmt->execute())
+				logging($cnx, "ERROR", "execute failed - reason:" . $stmt->error, "getQuestionContent", "dbfunctions.php");
+			else {
+				$stmt->fetch();
+
+				echo htmlspecialchars($content);
+
+			}
+			$stmt->close();
+		} else {
+			logging($cnx, "ERROR", "error stmt - reason:" . $cnx->error, "getQuestionContent", "dbfunctions.php");
+		}
+
+	}
+
+	/*****************
+		  Function : addQuestion
+		  Parameters : 
+		    $cnx : DB connection
+		    $user : user id
+		    $event : event id
+		    $question : question text
+		    $source : source
+		  Output : 1 or 0 (error)
+	*****************/
+
+	function addQuestion($cnx, $user, $event, $question, $source) {
+		$sql = "CALL addQuestion(?, ?, ?, ?)";
+		if ($stmt = $cnx->prepare($sql)) {
+			$stmt->bind_param("iisi", $user, $event, $question, $source);
+			if (!$stmt->execute()) {
+				logging($cnx, "ERROR", "execute failed - reason:" . $stmt->error, "addQuestion", "dbfunctions.php");
+				echo 0;
+			} else {
+
+				echo 1;
+			}
+			$stmt->close();
+		} else {
+			logging($cnx, "ERROR", "error stmt - reason:" . $cnx->error, "addQuestion", "dbfunctions.php");
+			echo 0;
+		}
+
+	}
+
+	/*****************
+		  Function : answerQuestion
+		  Parameters : 
+		    $cnx : DB connection
+		    $user : user id
+		    $event : event id
+		    $question : question text
+		    $response : id response
+		    $responseNumber : response number
+		    $source : source
+		  Output : 1 or 0 (error)
+	*****************/
+
+	function answerQuestion($cnx, $user, $event, $question, $response, $responseNumber, $source) {
+		$sql = "CALL answerQuestion(?, ?, ?, ?, ?, ?)";
+		if ($stmt = $cnx->prepare($sql)) {
+			$stmt->bind_param("iiiiii", $user, $event, $question, $response, $responseNumber, $source);
+			if (!$stmt->execute()) {
+				logging($cnx, "ERROR", "execute failed - reason:" . $stmt->error, "answerQuestion", "dbfunctions.php");
+				echo 0;
+			} else {
+
+				echo 1;
+			}
+			$stmt->close();
+		} else {
+			logging($cnx, "ERROR", "error stmt - reason:" . $cnx->error, "answerQuestion", "dbfunctions.php");
+			echo 0;
+		}
+
+	}
+
+	/*****************
+		  Function : addQuestionResponse
+		  Parameters : 
+		    $cnx : DB connection
+		    $user : user id
+		    $event : event id
+		    $question : question text
+		    $response1 : response 1 text
+		    $response2 : response 2 text
+		    $response3 : response 3 text
+		    $source : source
+		  Output : 1 or 0 (error)
+	*****************/
+
+	function addQuestionResponse($cnx, $user, $event, $question, $response1, $response2, $response3, $source) {
+		$sql = "CALL addQuestionResponse(?, ?, ?, ?, ?, ?, ?)";
+		if ($stmt = $cnx->prepare($sql)) {
+			$stmt->bind_param("iissssi", $user, $event, $question, $response1, $response2, $response3, $source);
+			if (!$stmt->execute()) {
+				logging($cnx, "ERROR", "execute failed - reason:" . $stmt->error, "addQuestionResponse", "dbfunctions.php");
+				echo 0;
+			} else {
+
+				echo 1;
+			}
+			$stmt->close();
+		} else {
+			logging($cnx, "ERROR", "error stmt - reason:" . $cnx->error, "addQuestionResponse", "dbfunctions.php");
+			echo 0;
+		}
+
+	}
+
+	/*****************
+		  Function : modifyQuestion
+		  Parameters : 
+		    $cnx : DB connection
+		    $user : user id
+		    $event : event id
+		    $evqust : evqust id
+		    $question : question text
+		  Output : 1 or 0 (error)
+	*****************/
+
+	function modifyQuestion($cnx, $user, $event, $evqust, $question) {
+		$sql = "CALL modifyQuestion(?, ?, ?, ?)";
+		if ($stmt = $cnx->prepare($sql)) {
+			$stmt->bind_param("iiis", $user, $event, $evqust, $question);
+			if (!$stmt->execute()) {
+				logging($cnx, "ERROR", "execute failed - reason:" . $stmt->error, "modifyQuestion", "dbfunctions.php");
+				echo 0;
+			} else {
+
+				echo 1;
+			}
+			$stmt->close();
+		} else {
+			logging($cnx, "ERROR", "error stmt - reason:" . $cnx->error, "modifyQuestion", "dbfunctions.php");
+			echo 0;
+		}
+
+	}
+
+	/*****************
+		  Function : addLike
+		  Parameters : 
+		    $cnx : DB connection
+		    $user : user id
+		    $event : event id
+		    $evqust : evqust id
+		    $likes : nombre de likes à ajouter
+		  Output : 1 or 0 (error)
+	*****************/
+
+	function addLike($cnx, $user, $event, $evqust, $likes) {
+		$sql = "CALL addLikes(?, ?, ?, ?)";
+		if ($stmt = $cnx->prepare($sql)) {
+			$stmt->bind_param("iiii", $user, $event, $evqust, $likes);
+			if (!$stmt->execute()) {
+				logging($cnx, "ERROR", "execute failed - reason:" . $stmt->error, "addLike", "dbfunctions.php");
+				echo 0;
+			} else {
+
+				echo 1;
+			}
+			$stmt->close();
+		} else {
+			logging($cnx, "ERROR", "error stmt - reason:" . $cnx->error, "addLike", "dbfunctions.php");
+			echo 0;
+		}
+
+	}
+
+	/*****************
+		  Function : applaud
+		  Parameters : 
+		    $cnx : DB connection
+		    $user : user id
+		    $event : event id
+		  Output : 1 or 0 (error)
+	*****************/
+
+	function applaud($cnx, $user, $event) {
+		$sql = "CALL applaud(?, ?)";
+		if ($stmt = $cnx->prepare($sql)) {
+			$stmt->bind_param("ii", $user, $event);
+			if (!$stmt->execute()) {
+				logging($cnx, "ERROR", "execute failed - reason:" . $stmt->error, "applaud", "dbfunctions.php");
+				echo 0;
+			} else {
+
+				echo 1;
+			}
+			$stmt->close();
+		} else {
+			logging($cnx, "ERROR", "error stmt - reason:" . $cnx->error, "applaud", "dbfunctions.php");
+			echo 0;
+		}
+
+	}
+
+	/*****************
+		  Function : vueMeter
+		  Parameters : 
+		    $cnx : DB connection
+		    $user : user id
+		    $event : event id
+		  Output : 1 or 0 (error)
+	*****************/
+
+	function vueMeter($cnx, $user, $event) {
+		$vueMeter = 0;
+		$sql = "SELECT vueMeter(?,?) AS vueMeter";
+		if ($stmt = $cnx->prepare($sql)) {
+			$stmt->bind_param("ii", $user, $event);
+			$stmt->bind_result($vueMeter);
+			if (!$stmt->execute())
+				logging($cnx, "ERROR", "execute failed - reason:" . $stmt->error, "vueMeter", "dbfunctions.php");
+			else {
+				$stmt->fetch();
+
+			}
+			$stmt->close();
+		} else {
+			logging($cnx, "ERROR", "error stmt - reason:" . $cnx->error, "vueMeter", "dbfunctions.php");
+		}
+
+		return $vueMeter;
+	}
+	/*****************
+		  Function : closeQuestion
+		  Parameters : 
+		    $cnx : DB connection
+		    $user : user id
+		    $event : evqust id
+		  Output : 1 or 0 (error)
+	*****************/
+
+	function closeQuestion($cnx, $user, $evqust) {
+		$sql = "CALL closeQuestion(?, ?)";
+		if ($stmt = $cnx->prepare($sql)) {
+			$stmt->bind_param("ii", $evqust, $user);
+			if (!$stmt->execute()) {
+				logging($cnx, "ERROR", "execute failed - reason:" . $stmt->error, "closeQuestion", "dbfunctions.php");
+				echo 0;
+			} else {
+
+				echo 1;
+			}
+			$stmt->close();
+		} else {
+			logging($cnx, "ERROR", "error stmt - reason:" . $cnx->error, "closeQuestion", "dbfunctions.php");
+			echo 0;
+		}
+
+	}
+
+	/*****************
+		  Function : moderateQuestion
+		  Parameters : 
+		    $cnx : DB connection
+		    $user : user id
+		    $event : evqust id
+		  Output : 1 or 0 (error)
+	*****************/
+
+	function moderateQuestion($cnx, $user, $evqust) {
+		$sql = "CALL moderateQuestion(?, ?)";
+		if ($stmt = $cnx->prepare($sql)) {
+			$stmt->bind_param("ii", $evqust, $user);
+			if (!$stmt->execute()) {
+				logging($cnx, "ERROR", "execute failed - reason:" . $stmt->error, "moderateQuestion", "dbfunctions.php");
+				echo 0;
+			} else {
+
+				echo 1;
+			}
+			$stmt->close();
+		} else {
+			logging($cnx, "ERROR", "error stmt - reason:" . $cnx->error, "moderateQuestion", "dbfunctions.php");
+			echo 0;
+		}
+
+	}
+
+	/*****************
+		  Function : selectQuestion
+		  Parameters : 
+		    $cnx : DB connection
+		    $user : user id
+		    $evqust : evqust id
+		  Output : 1 or 0 (error)
+	*****************/
+
+	function selectQuestion($cnx, $user, $evqust) {
+		$sql = "CALL selectQuestion(?, ?)";
+		if ($stmt = $cnx->prepare($sql)) {
+			$stmt->bind_param("ii", $evqust, $user);
+			if (!$stmt->execute()) {
+				logging($cnx, "ERROR", "execute failed - reason:" . $stmt->error, "selectQuestion", "dbfunctions.php");
+				echo 0;
+			} else {
+
+				echo 1;
+			}
+			$stmt->close();
+		} else {
+			logging($cnx, "ERROR", "error stmt - reason:" . $cnx->error, "selectQuestion", "dbfunctions.php");
+			echo 0;
+		}
+
+	}
+	
+	/*****************
+		  Function : pushQuestion
+		  Parameters : 
+		    $cnx : DB connection
+		    $user : user id
+		    $evqust : evqust id
+		  Output : 1 or 0 (error)
+	*****************/
+
+	function pushQuestion($cnx, $user, $evqust) {
+		$sql = "CALL pushQuestion(?, ?)";
+		if ($stmt = $cnx->prepare($sql)) {
+			$stmt->bind_param("ii", $evqust, $user);
+			if (!$stmt->execute()) {
+				logging($cnx, "ERROR", "execute failed - reason:" . $stmt->error, "pushQuestion", "dbfunctions.php");
+				echo 0;
+			} else {
+
+				echo 1;
+			}
+			$stmt->close();
+		} else {
+			logging($cnx, "ERROR", "error stmt - reason:" . $cnx->error, "pushQuestion", "dbfunctions.php");
+			echo 0;
+		}
+
+	}
+	
+	/*****************
+		  Function : getReview
+		  Parameters : 
+		    $cnx : DB connection
+		    $event : event id
+		    $relatedEvent : related event id
+		    $last_date : previous date
+		  Output : JSON output
+	*****************/
+
+	function getReview($cnx, $event, $relatedEvent, $last_date) {
+		$sql = "(SELECT r.id_evqust AS id, r.type, r.infos, r.date AS last FROM review AS r, evqust AS e WHERE r.date >= ? AND r.id_evqust = e.id AND e.id_event = ? AND r.type != 'APPLAUD') UNION (SELECT r.id_evqust AS id, r.type, r.infos, r.date AS last FROM review AS r, evqust AS e WHERE r.date >= ? AND r.id_evqust = e.id AND e.id_event = ? AND r.type = 'APPLAUD') ORDER BY last";
+		if ($stmt = $cnx->prepare($sql)) {
+			$stmt->bind_param("sisi", $last_date, $relatedEvent, $last_date, $event);
+			$stmt->bind_result($id, $type, $infos, $last);
+			if (!$stmt->execute())
+				logging($cnx, "ERROR", "execute failed - reason:" . $stmt->error, "getReview", "dbfunctions.php");
+			else {
+
+				$first = true;
+				while($stmt->fetch()) {
+					if ($first) $first = false; else echo ", " . PHP_EOL;
+					echo "{ \"id\" : " . $id . ", \"type\" : \"" . $type . "\", \"infos\" : " . $infos . ", \"last\" : \"" . $last . "\" }" . PHP_EOL;
+				}
+
+			}
+			$stmt->close();
+		} else {
+			logging($cnx, "ERROR", "error stmt - reason:" . $cnx->error, "getReview", "dbfunctions.php");
+		}
+
+	}
+
+	/*****************
+		  Function : getReviewModerateur
+		  Parameters : 
+		    $cnx : DB connection
+		    $event : event id
+		    $last_date : previous date
+		  Output : JSON output
+	*****************/
+
+	function getReviewModerateur($cnx, $event, $last_date) {
+		$sql = "SELECT r.id_evqust AS id, r.type, r.infos, r.date AS last FROM review AS r, evqust AS e WHERE r.date >= ? AND r.id_evqust = e.id AND e.id_event IN (SELECT ev.id FROM `events` AS ev WHERE ev.link = ?) ORDER BY last";
+		if ($stmt = $cnx->prepare($sql)) {
+			$stmt->bind_param("si", $last_date, $event);
+			$stmt->bind_result($id, $type, $infos, $last);
+			if (!$stmt->execute())
+				logging($cnx, "ERROR", "execute failed - reason:" . $stmt->error, "getReviewModerateur", "dbfunctions.php");
+			else {
+
+				$first = true;
+				while($stmt->fetch()) {
+					if ($first) $first = false; else echo ", " . PHP_EOL;
+					echo "{ \"id\" : " . $id . ", \"type\" : \"" . $type . "\", \"infos\" : " . $infos . ", \"last\" : \"" . $last . "\" }" . PHP_EOL;
+				}
+
+			}
+			$stmt->close();
+		} else {
+			logging($cnx, "ERROR", "error stmt - reason:" . $cnx->error, "getReviewModerateur", "dbfunctions.php");
+		}
+
+	}
+
+	/*****************
+		  Function : disconnect
+		  Parameters : 
+		    $cnx : DB connection
+		    $user : user id
+		    $event : event id
+		  Output : 1 or 0 (error)
+	*****************/
+
+	function disconnect($cnx, $user, $event) {
+		$sql = "CALL disconnect(?, ?)";
+		if ($stmt = $cnx->prepare($sql)) {
+			$stmt->bind_param("ii", $user, $event);
+			if (!$stmt->execute()) {
+				logging($cnx, "ERROR", "execute failed - reason:" . $stmt->error, "disconnect", "dbfunctions.php");
+				echo 0;
+			} else {
+
+				if (array_key_exists('session', $_COOKIE)) {
+					$_COOKIE['session'] = "";
+				}
+
+				echo 1;
+			}
+			$stmt->close();
+		} else {
+			logging($cnx, "ERROR", "error stmt - reason:" . $cnx->error, "disconnect", "dbfunctions.php");
+			echo 0;
+		}
+
+	}
+?>

@@ -1,0 +1,34 @@
+.vbox-a {\indent
+display:flex;
+flex-direction:column;
+width:100%;
+height:auto\unindent
+}
+.vbox-element-b {\indent
+height:auto\unindent
+}
+.hbox-c {\indent
+display:inline-flex;
+width:100%;
+height:auto\unindent
+}
+.hbox-element-d {\indent
+width:100%\unindent
+}
+.vbox-e {\indent
+display:flex;
+flex-direction:column;
+width:100%;
+height:auto\unindent
+}
+.vbox-element-f {\indent
+margin:0 auto;
+height:262px;
+width:400px;
+background-image:url('../images/totem-horizontal+baseline-noir-noir-fond-transparent.png')\unindent
+}
+.vbox-element-g {\indent
+margin:0 auto;
+height:auto;
+width:400px\unindent
+}

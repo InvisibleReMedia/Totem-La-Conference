@@ -1,0 +1,39 @@
+
+	@font-face {
+		font-family : "Lobster";
+		src : url("../fonts/Lobster/Lobster-Regular.ttf")
+	}
+	@font-face {
+		font-family : "Open-Sans";
+		src : url("../fonts/Open-Sans/OpenSans-Regular.ttf")
+	}
+	body {
+		background-color:yellow;
+	}
+	.title {
+		font-family:Lobster, Arial, Helvetica;
+		font-size:1em;
+		text-align:center;
+	}
+	header {
+		position:relative;
+		background-image:url('../images/totem-header.png');
+		margin-top:20px;
+		height:91px;
+		min-width:297px;
+		width:100%;
+	}
+	article {
+		position:relative;
+		background-image:url('../images/totem-content.png');
+		background-repeat:repeat-y;
+		min-width:297px;
+		width:100%;
+	}
+	footer {
+		position:relative;
+		background-image:url('../images/totem-footer.png');
+		height:123px;
+		min-width:297px;
+		width:100%;
+	}

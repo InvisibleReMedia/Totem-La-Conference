@@ -1,0 +1,45 @@
+.vbox-a {\indent
+display:flex;
+flex-direction:row;
+height:auto;
+width:auto\unindent
+}
+.vbox-element-b {\indent
+width:auto\unindent
+}
+.hbox-c {\indent
+display:flex;
+flex-direction:column;
+height:auto;
+width:auto\unindent
+}
+.hbox-element-d {\indent
+height:100%;
+width:auto\unindent
+}
+.vbox-e {\indent
+display:flex;
+flex-direction:row;
+height:100%;
+width:auto\unindent
+}
+.vbox-element-f {\indent
+margin:0 0;
+vertical-align:middle;
+width:262px;
+background-image:url('../images/totem-vertical+baseline-noir-noir-fond-transparent.png')\unindent
+}
+.vbox-element-g {\indent
+width:400px;
+height:320px\unindent
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hideSB::-webkit-scrollbar {
+	display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.hideSB {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}
